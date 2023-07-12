@@ -4,6 +4,7 @@
 # This file is covered by the GNU General Public License version 2.
 # See the file COPYING for more details.
 
+import wx
 from datetime import datetime
 from dataclasses import dataclass, field
 from typing import Callable, Optional, List, Dict, Any
