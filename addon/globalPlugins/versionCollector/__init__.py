@@ -210,7 +210,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.addToCacheOrUpdateDate(_AppData(
 				name=f"{addon.manifest['summary']} ({addon.name})",
 				version=addon.version, isAddon=True, is64bit=False,
-				extra={"name": addon.name, "author": addon.manifest["author"], "enabled": addon.isEnabled}
+				extra={"name": addon.name, "author": addon.manifest["author"], "enabled": not addon.isDisabled}
 			))
 
 	@staticmethod
