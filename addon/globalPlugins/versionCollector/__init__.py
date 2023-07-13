@@ -275,7 +275,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		)
 
 	def showHTMLReport(self) -> None:
-		output = """<h1>Detected Applications:</h1>\n<table style="margin-left: auto; margin-right: auto;">
+		# Translators: Suggestions on how a user can interact with the Version Report.
+		output = "<p>" + _("Use shift+arrow keys to select, ctrl+c to copy to clipboard.")
+		output += """</p>\n<h1>Detected Applications:</h1>\n<table style="margin-left: auto; margin-right: auto;">
 		<tr><th>NAME</th> <th>VERSION</th> <th>BITNESS</th> <tr>
 		"""
 		output += self.getStructuredAppList(True)
@@ -285,9 +287,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"""
 		output += self.getStructuredAddonList(True)
 		output += "</table><br>\n<p>"
-		# Translators: Suggestions on how a user can interact with the Version Report.
-		output += _("Use shift+arrow keys to select, ctrl+c to copy to clipboard.")
-		output += "</p>\n<p>"
 		# Translators: Instruction to press escape to leave the report window.
 		output += _("Press escape when done.") + "</p>"
 		# Translators: Title of the Application Versions Report when shown in a webpage style.
