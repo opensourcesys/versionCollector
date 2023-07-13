@@ -208,7 +208,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"""
 		for addon in addonHandler.getAvailableAddons():
 			self.addToCacheOrUpdateDate(_AppData(
-				name=addon.manifest["summary"], version=addon.version, isAddon=True, is64bit=False,
+				name=f"{addon.manifest['summary']} ({addon.name})",
+				version=addon.version, isAddon=True, is64bit=False,
 				extra={"name": addon.name, "author": addon.manifest["author"], "enabled": addon.isEnabled}
 			))
 
@@ -274,13 +275,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		)
 
 	def showHTMLReport(self) -> None:
-		output = """		<table style="margin-left: auto; margin-right: auto;">
-		<caption>Application information:</caption>
+		output = """<h1>Detected Applications:</h1>\n<table style="margin-left: auto; margin-right: auto;">
 		<tr><th>NAME</th> <th>VERSION</th> <th>BITNESS</th> <tr>
 		"""
 		output += self.getStructuredAppList(True)
-		output += """</table><br><table style="margin-left: auto; margin-right: auto;">
-		<caption>List of NVDA add-ons:</caption>
+		output += """</table><br>
+		<h1>Detected NVDA Add-ons:</h1>\n<table style="margin-left: auto; margin-right: auto;">
 		<tr><th>NAME</th> <th>VERSION</th> <th>STATUS</th> <th>AUTHOR/PUBLISHER</th></tr>
 		"""
 		output += self.getStructuredAddonList(True)
