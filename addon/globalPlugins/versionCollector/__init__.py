@@ -88,11 +88,11 @@ def addToCache(app: _AppData, checked: bool = False) -> None:
 	global _dirtyCache, _appDataCache
 	if not checked:
 		if isCached(app):
-			raise RuntimeError(f"Tried to add an already cached app to the cache! {app}")
+			raise RuntimeError(f"Tried to add an already cached app to the cache! {app.name}")
 	# Adding . . .
 	_appDataCache.append(app)
 	_dirtyCache = True
-	log.debug(f"Added an app to the cache. {app}")
+	log.debug(f'Added an {"add-on" if app.isAddon else "app"} to the cache: {app.name}.')
 
 def _showState(message: Optional[str] = None) -> None:
 	"""A debugging function which writes everything the add-on knows to a browseableMessage.
@@ -159,8 +159,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		obj = api.getForegroundObject()
 		# Handle a strange case. This is mentioned in core code. May not be complete solution. FixMe
 		if obj.processHandle == 0:
-			log.debug("\tRan into the obj.processHandle == 0 situation. Not recording a new app.")
-			return
+			log.debug("\t\tRan into the obj.processHandle == 0 situation. Recording a new app anyway.")
+			#return
 		currentApp: _AppData = self.normalizeAppInfo(
 			getattr(obj.appModule, "appName", None),
 			getattr(obj.appModule, "productName", None),
