@@ -159,14 +159,18 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		obj = api.getForegroundObject()
 		# Handle a strange case. This is mentioned in core code. May not be complete solution. FixMe
 		if obj.processHandle == 0:
-			log.debug("\t\tRan into the obj.processHandle == 0 situation. Recording a new app anyway.")
-			#return
-		currentApp: _AppData = self.normalizeAppInfo(
-			getattr(obj.appModule, "appName", None),
-			getattr(obj.appModule, "productName", None),
-			getattr(obj.appModule, "productVersion", None),
-			getattr(obj.appModule, "is64BitProcess", None)
-		)
+			log.debug("\t\tRan into the obj.processHandle == 0 situation for {obj}--trying to use last child.")
+			obj = obj.simpleLastChild
+		try:
+			currentApp: _AppData = self.normalizeAppInfo(
+				getattr(obj.appModule, "appName", None),
+				getattr(obj.appModule, "productName", None),
+				getattr(obj.appModule, "productVersion", None),
+				getattr(obj.appModule, "is64BitProcess", None)
+			)
+		except Exception as e:
+			log.debug(f"Couldn't get module info for object {obj} ({e}).")
+			return
 		# If the current app is not the same as the previously known app, we have a new app
 		if currentApp != self.currentApp:
 			self.currentApp = currentApp
