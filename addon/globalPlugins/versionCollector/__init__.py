@@ -18,7 +18,7 @@ from NVDAObjects import NVDAObject
 from scriptHandler import script, getLastScriptRepeatCount
 from globalCommands import SCRCAT_TOOLS
 from appModuleHandler import post_appSwitch
-from core import postNvdaStartup
+from core import postNvdaStartup, callLater as core_callLater
 
 #from . import toolsGUI
 
@@ -88,11 +88,11 @@ def addToCache(app: _AppData, checked: bool = False) -> None:
 	global _dirtyCache, _appDataCache
 	if not checked:
 		if isCached(app):
-			raise RuntimeError(f"Tried to add an already cached app to the cache! {app}")
+			raise RuntimeError(f"Tried to add an already cached app to the cache! {app.name}")
 	# Adding . . .
 	_appDataCache.append(app)
 	_dirtyCache = True
-	log.debug(f"Added an app to the cache. {app}")
+	log.debug(f'Added an {"add-on" if app.isAddon else "app"} to the cache: {app.name}.')
 
 def _showState(message: Optional[str] = None) -> None:
 	"""A debugging function which writes everything the add-on knows to a browseableMessage.
@@ -119,15 +119,17 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.currentApp: Optional[_AppData] = None
 		# Run our handler whenever the application changes
 		post_appSwitch.register(self.onAppSwitch)
+		# Seed the pond
+		postNvdaStartup.register(self.collectInitialApp)
 		# Become aware of all NVDA add-ons
 		postNvdaStartup.register(self.retrieveInstalledAddons)
-		# Seed the pond
-		self.onAppSwitch()
 
 	def terminate(self) -> None:
 		# Unregister the extensionPoints
 		post_appSwitch.unregister(self.onAppSwitch)
+		postNvdaStartup.unregister(self.onAppSwitch)
 		postNvdaStartup.unregister(self.retrieveInstalledAddons)
+		super().terminate()
 
 	@script(
 		gesture="kb:NVDA+control+shift+v",
@@ -157,18 +159,28 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		obj = api.getForegroundObject()
 		# Handle a strange case. This is mentioned in core code. May not be complete solution. FixMe
 		if obj.processHandle == 0:
-			log.debug("\tRan into the obj.processHandle == 0 situation. Not recording a new app.")
+			log.debug("\t\tRan into the obj.processHandle == 0 situation for {obj}--trying to use last child.")
+			obj = obj.simpleLastChild
+		try:
+			currentApp: _AppData = self.normalizeAppInfo(
+				getattr(obj.appModule, "appName", None),
+				getattr(obj.appModule, "productName", None),
+				getattr(obj.appModule, "productVersion", None),
+				getattr(obj.appModule, "is64BitProcess", None)
+			)
+		except Exception as e:
+			log.debug(f"Couldn't get module info for object {obj} ({e}).")
 			return
-		currentApp: _AppData = self.normalizeAppInfo(
-			getattr(obj.appModule, "appName", None),
-			getattr(obj.appModule, "productName", None),
-			getattr(obj.appModule, "productVersion", None),
-			getattr(obj.appModule, "is64BitProcess", None)
-		)
 		# If the current app is not the same as the previously known app, we have a new app
 		if currentApp != self.currentApp:
 			self.currentApp = currentApp
 			self.addToCacheOrUpdateDate(currentApp)
+
+	def collectInitialApp(self) -> None:
+		"""Called as a registered extensionPoint, when NVDA first finishes loading."""
+		log.debug("Collecting the initial app after a delay.")
+		core_callLater(1000, self.onAppSwitch)
+		#postNvdaStartup.unregister(self.collectInitialApp)
 
 	def addToCacheOrUpdateDate(self, subject: _AppData) -> None:
 		ind = getCacheIndexOf(subject)
@@ -275,8 +287,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		)
 
 	def showHTMLReport(self) -> None:
+		output = """<style>
+		tr td:first-child {padding-left:0px;}
+		td {padding:10px 0px 10px 50px;}
+		</style>
+		"""
 		# Translators: Suggestions on how a user can interact with the Version Report.
-		output = "<p>" + _("Use shift+arrow keys to select, ctrl+c to copy to clipboard.")
+		output += "<p>" + _("Use shift+arrow keys to select, ctrl+c to copy to clipboard.")
 		output += """</p>\n<br><h1>Detected Applications:</h1>\n<table style="margin-left: auto; margin-right: auto;">
 		<tr><th>NAME</th> <th>VERSION</th> <th>BITNESS</th> <tr>
 		"""

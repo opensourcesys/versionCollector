@@ -2,7 +2,7 @@
 
 This is an [NVDA][1] add-on, designed to collect the name and version numbers of any software the user runs.
 This process is completely passive to the user.
-As long as the add-on is enabled, it will collect (remember) the name, version, and bitness (64 or 32) for every piece of software on your system which receives NVDA focus.
+As long as Version Collector is enabled, it will collect (remember) the name, version, and bitness (64 or 32) for every piece of software on your system which receives NVDA focus.
 A list of all installed NVDA add-ons is also collected at startup.
 
 Currently, each time you restart NVDA, the collected data is lost.
