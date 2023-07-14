@@ -119,14 +119,15 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.currentApp: Optional[_AppData] = None
 		# Run our handler whenever the application changes
 		post_appSwitch.register(self.onAppSwitch)
+		# Seed the pond
+		postNvdaStartup.register(self.onAppSwitch())
 		# Become aware of all NVDA add-ons
 		postNvdaStartup.register(self.retrieveInstalledAddons)
-		# Seed the pond
-		self.onAppSwitch()
 
 	def terminate(self) -> None:
 		# Unregister the extensionPoints
 		post_appSwitch.unregister(self.onAppSwitch)
+		postNvdaStartup.unregister(self.onAppSwitch)
 		postNvdaStartup.unregister(self.retrieveInstalledAddons)
 
 	@script(
