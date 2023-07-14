@@ -120,7 +120,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# Run our handler whenever the application changes
 		post_appSwitch.register(self.onAppSwitch)
 		# Seed the pond
-		postNvdaStartup.register(self.onAppSwitch())
+		postNvdaStartup.register(self.onAppSwitch)
 		# Become aware of all NVDA add-ons
 		postNvdaStartup.register(self.retrieveInstalledAddons)
 
@@ -129,6 +129,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		post_appSwitch.unregister(self.onAppSwitch)
 		postNvdaStartup.unregister(self.onAppSwitch)
 		postNvdaStartup.unregister(self.retrieveInstalledAddons)
+		super().terminate()
 
 	@script(
 		gesture="kb:NVDA+control+shift+v",
@@ -276,8 +277,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		)
 
 	def showHTMLReport(self) -> None:
+		output = """<style>
+		tr td:first-child {padding-left:0px;}
+		td {padding:10px 0px 10px 50px;}
+		</style>
+		"""
 		# Translators: Suggestions on how a user can interact with the Version Report.
-		output = "<p>" + _("Use shift+arrow keys to select, ctrl+c to copy to clipboard.")
+		output += "<p>" + _("Use shift+arrow keys to select, ctrl+c to copy to clipboard.")
 		output += """</p>\n<br><h1>Detected Applications:</h1>\n<table style="margin-left: auto; margin-right: auto;">
 		<tr><th>NAME</th> <th>VERSION</th> <th>BITNESS</th> <tr>
 		"""
