@@ -120,7 +120,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# Run our handler whenever the application changes
 		post_appSwitch.register(self.onAppSwitch)
 		# Seed the pond
-		postNvdaStartup.register(self.onAppSwitch)
+		postNvdaStartup.register(self.collectInitialApp)
 		# Become aware of all NVDA add-ons
 		postNvdaStartup.register(self.retrieveInstalledAddons)
 
@@ -175,6 +175,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		if currentApp != self.currentApp:
 			self.currentApp = currentApp
 			self.addToCacheOrUpdateDate(currentApp)
+
+	def collectInitialApp(self) -> None:
+		"""Called as a registered extensionPoint, when NVDA first finishes loading."""
+		wx.CallLater(1000, self.onAppSwitch)
+		postNvdaStartup.unregister(self.detectInitialApp)
 
 	def addToCacheOrUpdateDate(self, subject: _AppData) -> None:
 		ind = getCacheIndexOf(subject)
