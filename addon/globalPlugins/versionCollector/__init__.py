@@ -18,7 +18,7 @@ from NVDAObjects import NVDAObject
 from scriptHandler import script, getLastScriptRepeatCount
 from globalCommands import SCRCAT_TOOLS
 from appModuleHandler import post_appSwitch
-from core import postNvdaStartup
+from core import postNvdaStartup, callLater as core_callLater
 
 #from . import toolsGUI
 
@@ -179,8 +179,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def collectInitialApp(self) -> None:
 		"""Called as a registered extensionPoint, when NVDA first finishes loading."""
 		log.debug("Collecting the initial app after a delay.")
-		wx.CallLater(1000, self.onAppSwitch)
-		postNvdaStartup.unregister(self.collectInitialApp)
+		core_callLater(1000, self.onAppSwitch)
+		#postNvdaStartup.unregister(self.collectInitialApp)
 
 	def addToCacheOrUpdateDate(self, subject: _AppData) -> None:
 		ind = getCacheIndexOf(subject)
