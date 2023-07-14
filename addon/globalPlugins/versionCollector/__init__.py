@@ -178,8 +178,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def collectInitialApp(self) -> None:
 		"""Called as a registered extensionPoint, when NVDA first finishes loading."""
+		log.debug("Collecting the initial app after a delay.")
 		wx.CallLater(1000, self.onAppSwitch)
-		postNvdaStartup.unregister(self.detectInitialApp)
+		postNvdaStartup.unregister(self.collectInitialApp)
 
 	def addToCacheOrUpdateDate(self, subject: _AppData) -> None:
 		ind = getCacheIndexOf(subject)
