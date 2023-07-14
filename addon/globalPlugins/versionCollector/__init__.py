@@ -294,12 +294,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"""
 		# Translators: Suggestions on how a user can interact with the Version Report.
 		output += "<p>" + _("Use shift+arrow keys to select, ctrl+c to copy to clipboard.")
-		output += """</p>\n<br><h1>Detected Applications:</h1>\n<table style="margin-left: auto; margin-right: auto;">
-		<tr><th>NAME</th> <th>VERSION</th> <th>BITNESS</th> <tr>
+		output += """</p>\n<br><h1>Detected Applications:</h1>\n<table>
+		<tr><th>NAME</th> <th>VERSION</th> <th>BITNESS</th> </tr>
 		"""
 		output += self.getStructuredAppList(True)
 		output += """</table><br>
-		<h1>Detected NVDA Add-ons:</h1>\n<table style="margin-left: auto; margin-right: auto;">
+		<h1>Detected NVDA Add-ons:</h1>\n<table>
 		<tr><th>NAME</th> <th>VERSION</th> <th>STATUS</th> <th>AUTHOR/PUBLISHER</th></tr>
 		"""
 		output += self.getStructuredAddonList(True)
