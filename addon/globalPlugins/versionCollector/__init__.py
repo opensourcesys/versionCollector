@@ -229,12 +229,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def createStructuredList(func: Callable, useHTML: bool = False, *, hideFields: tuple = (), transformFields: Dict[str, Callable] = {}) -> str:
 		"""Takes a generator of _AppData records, and returns their data in a structured way."""
 		if useHTML:
-			lineStart = "<tr>"
+			lineStart = "<tr><TD>&rarrtl;</TD>"
 			fieldStart = "<td>"
 			fieldEnd = "</td>"
 			lineEnd = "</tr>\n"
 		else:
-			lineStart = ""
+			lineStart = "- "
 			fieldStart = ""
 			fieldEnd = "\t"
 			lineEnd = "\n"
@@ -289,6 +289,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def showHTMLReport(self) -> None:
 		output = """<style>
 		table {
+		table-layout: auto;
+		width: 100%;
 		border-collapse: separate;
 		border-spacing: 80px 0;
 		border-left: 100px solid transparent;
@@ -303,12 +305,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# Translators: Suggestions on how a user can interact with the Version Report.
 		output += "<p>" + _("Use shift+arrow keys to select, ctrl+c to copy to clipboard.")
 		output += """</p>\n<br><h1>Detected Applications:</h1>\n<table>
-		<tr><th>NAME</th> <th>VERSION</th> <th>BITNESS</th> </tr>
+		<tr><TH>&nbsp;</TH> <TH>NAME</TH> <TH>VERSION</TH> <TH>BITNESS</TH> </tr>
 		"""
 		output += self.getStructuredAppList(True)
 		output += """</table><br>
 		<h1>Detected NVDA Add-ons:</h1>\n<table>
-		<tr><th>NAME</th> <th>VERSION</th> <th>STATUS</th> <th>AUTHOR/PUBLISHER</th></tr>
+		<tr><TH>&nbsp;</TH><TH>NAME</TH> <TH>VERSION</TH> <TH>STATUS</TH> <TH>AUTHOR/PUBLISHER</TH></tr>
 		"""
 		output += self.getStructuredAddonList(True)
 		output += "</table><br>\n<p>"
