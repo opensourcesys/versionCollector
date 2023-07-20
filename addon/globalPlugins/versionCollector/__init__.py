@@ -220,7 +220,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"""
 		for addon in addonHandler.getAvailableAddons():
 			self.addToCacheOrUpdateDate(_AppData(
-				name=f"{addon.manifest['summary']} ({addon.name})",
+				name=addon.manifest["summary"],
 				version=addon.version, isAddon=True, is64bit=False,
 				extra={"name": addon.name, "author": addon.manifest["author"], "enabled": not addon.isDisabled}
 			))
@@ -280,14 +280,14 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def getStructuredAppList(self, useHTML=False) -> str:
 		return self.createStructuredList(
 			self.generateAppsOnly, useHTML, hideFields=("isAddon", "isAddonEnabled", "extra"),
-			transformFields={"is64bit": lambda x: "64 bit" if x else "32 bit"}
+			transformFields={"is64bit": lambda x: "[64 bit]" if x else "[32 bit]"}
 		)
 
 	def getStructuredAddonList(self, useHTML=False) -> str:
 		return self.createStructuredList(
 			self.generateAddonsOnly, useHTML, hideFields=("isAddon", "is64bit"),
 			transformFields={
-				"extra": lambda x: x["author"],
+				"extra": lambda x: f'{x["author"]}\0({x["name"]})',
 				"isAddonEnabled": lambda x: "[enabled]" if x else "[disabled]"
 			}
 		)
