@@ -226,7 +226,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			))
 
 	@staticmethod
-	def createStructuredList(func: Callable, useHTML: bool = False, *, hideFields: tuple = (), transformFields: Dict[str, Callable] = {}) -> str:
+	def createStructuredList(
+			func: Callable,
+			useHTML: bool = False,
+			*,
+			hideFields: tuple = (),
+			transformFields: Dict[str, Callable] = {}
+	) -> str:
 		"""Takes a generator of _AppData records, and returns their data in a structured way."""
 		if useHTML:
 			lineStart = "<tr><TD>&rarrtl;</TD>"
