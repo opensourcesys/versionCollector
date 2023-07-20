@@ -248,17 +248,20 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		for appData in func():
 			line: str = ""
 			for property in ("name", "version", "is64bit", "isAddon", "isAddonEnabled", "extra"):
+				fields: list = []
 				if property not in hideFields:
 					if property in transformFields:
-						result = (transformFields[property])(getattr(appData, property))
+						transformed = (transformFields[property])(getattr(appData, property))
+						if isinstance(transformed, list):
+							fields.extend(transformed)
+						else:
+							fields.append(transformed)
 					else:
-						result = getattr(appData, property)
-					# We only know how to display strings
-					if isinstance(result, str):
-						line += f"{fieldStart}{result}{fieldEnd}"
+						fields.append(getattr(appData, property))
+				for field in fields:
+					line += f"{fieldStart}{field}{fieldEnd}"
 			if line != "":
-				line = f"{lineStart}{line}{lineEnd}"
-				returnable += line
+				returnable += f"{lineStart}{line}{lineEnd}"
 		return returnable
 
 	@staticmethod
@@ -287,7 +290,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		return self.createStructuredList(
 			self.generateAddonsOnly, useHTML, hideFields=("isAddon", "is64bit"),
 			transformFields={
-				"extra": lambda x: f'{x["author"]}\0({x["name"]})',
+				"extra": lambda x: [ x["author"], f'({x["name"]})' ],
 				"isAddonEnabled": lambda x: "[enabled]" if x else "[disabled]"
 			}
 		)
