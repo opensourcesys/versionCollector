@@ -1,8 +1,9 @@
 ### Version Collector: An NVDA Add-on
 
 This is an [NVDA][1] add-on, designed to collect the name and version numbers of any software the user runs.
-This process is completely passive to the user.
 As long as Version Collector is enabled, it will collect (remember) the name, version, and bitness (64 or 32) for every piece of software on your system which receives NVDA focus.
+It will not just detect everything running when it starts--it only knows about applications, when you open or alt+tab to them while NVDA is running.
+Therefore, the list of detected applications will keep getting longer, throughout your computing session.
 A list of all installed NVDA add-ons is also collected at startup.
 
 Currently, each time you restart NVDA, the collected data is lost.
@@ -13,10 +14,21 @@ A file-backed listing is intended for a future version.
 The add-on can produce two reports.
 The reports capture the remembered list of apps and information as of the time you request the report, even if you aren't still running those apps.
 
-#### The HTML report:
+#### The text report:
 
-To view a tabular list of applications and add-ons which Version Collector has encountered, press `NVDA+ctrl+shift+v`.
+It is expected that most users will use this add-on to share their list of running apps and add-ons (or possibly an edited version), for support purposes.
+Therefore, the main report you can generate, is a text report, which is copied to the Windows clipboard.
+To do this, press the `NVDA+shift+ctrl+v` key sequence.
 You may change this key mapping under the **Tools** category of NVDA's Input Gestures dialog--search for "Version Collector".
+
+A text formatted report will be copied directly to the clipboard, and you will hear a notification about the copy after an approximate one second delay.
+
+The columns in the table are separated by tabs, and formatting is preserved as much as possible.
+
+#### The viewable report:
+
+If, instead of copying the report, you would rather read it as a formatted document, press `NVDA+ctrl+shift+v` twice, rapidly (within one second).
+A tabular HTML based report will open for you to browse.
 You can exit the report view by pressing escape.
 
 You can browse the version report like a webpage, with two tables.
@@ -28,13 +40,6 @@ You may select part or all of these items using normal Windows or NVDA commands,
 Note, however, that because of the way copying from NVDA's browse mode works, the tabular formatting will be lost if you copy from this window.
 The HTML report is intended mainly for your own reading.
 The text report is preferable for copying.
-
-#### The text report:
-
-As an alternative to viewing the HTML report, if your objective is to copy the entire list of detected versions to the clipboard, you may instead press the `NVDA+shift+ctrl+v` key sequence twice rapidly.
-In this case, a text formatted report will be copied directly to the clipboard without ever opening the report viewer.
-
-The columns in the table are separated by tabs, and formatting is preserved as much as possible.
 
 ### Special notes
 
