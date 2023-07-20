@@ -235,7 +235,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	) -> str:
 		"""Takes a generator of _AppData records, and returns their data in a structured way."""
 		if useHTML:
-			lineStart = "<tr><TD>&rarrtl;</TD>"
+			lineStart = "<tr><TD>&#8611;</TD>"
 			fieldStart = "<td>"
 			fieldEnd = "</td>"
 			lineEnd = "</tr>\n"
@@ -319,7 +319,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		output += self.getStructuredAppList(True)
 		output += """</table><br>
 		<h1>Detected NVDA Add-ons:</h1>\n<table>
-		<tr><TH>&nbsp;</TH><TH>NAME</TH> <TH>VERSION</TH> <TH>STATUS</TH> <TH>AUTHOR/PUBLISHER</TH></tr>
+		<tr><TH>&nbsp;</TH><TH>NAME</TH> <TH>VERSION</TH> <TH>STATUS</TH> <TH>AUTHOR/PUBLISHER</TH> <TH>Add-on ID</TH></tr>
 		"""
 		output += self.getStructuredAddonList(True)
 		output += "</table><br>\n<p>"
