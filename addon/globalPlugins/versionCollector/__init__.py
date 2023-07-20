@@ -282,7 +282,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.generateAddonsOnly, useHTML, hideFields=("isAddon", "is64bit"),
 			transformFields={
 				"extra": lambda x: x["author"],
-				"isAddonEnabled": lambda x: "(enabled)" if x else "(disabled)"
+				"isAddonEnabled": lambda x: "[enabled]" if x else "[disabled]"
 			}
 		)
 
