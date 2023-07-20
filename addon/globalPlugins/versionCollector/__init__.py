@@ -288,8 +288,16 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
 	def showHTMLReport(self) -> None:
 		output = """<style>
+		table {
+		border-collapse: separate;
+		border-spacing: 80px 0;
+		border-left: 100px solid transparent;
+		}
+		td, th{
+		padding: 10px 0;
+		}
 		tr td:first-child {padding-left:0px;}
-		td {padding:10px 0px 10px 50px;}
+		tr td:last-child { margin-right: 0; }
 		</style>
 		"""
 		# Translators: Suggestions on how a user can interact with the Version Report.
