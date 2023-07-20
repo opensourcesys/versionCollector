@@ -134,24 +134,24 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	@script(
 		gesture="kb:NVDA+control+shift+v",
 		# Translators: An input help description of the report view and copy script.
-		description=_("Show the Version Collector report. Press twice to copy a text version to the clipboard."),
+		description=_("Copy the Version Collector report to the clipboard. Press twice to view it instead."),
 		category=SCRCAT_TOOLS
 	)
-	def script_showReport(self, gesture) -> None:
+	def script_versionCollectorReport(self, gesture) -> None:
 		presses = getLastScriptRepeatCount()
 		if presses == 0:  # Pressed once
-			# Use wx.CallLater to delay firing of the HTML based report long enough to determine
-			# whether a clipboard copy is what is actually being requested.
+			# Use wx.CallLater to delay firing of the first potential action long enough to determine
+			# whether the second action is what is actually being requested.
 			# If so, the wx.Timer is cancelled, but left available for later.
 			try:
-				self.showReportTimer.Start(510)
+				self.firstScriptActionTimer.Start(505)
 			except AttributeError:
-				self.showReportTimer = wx.CallLater(510, self.showHTMLReport)
+				self.firstScriptActionTimer = wx.CallLater(505, self.copyTextReport)
 		elif presses == 1:  # Pressed twice
-			self.showReportTimer.Stop()
-			self.copyTextReport()
+			self.firstScriptActionTimer.Stop()
+			self.showHTMLReport()
 		else:  # Pressed more than twice. Do nothing
-			self.showReportTimer.Stop()
+			self.firstScriptActionTimer.Stop()
 			return
 
 	def onAppSwitch(self) -> None:
