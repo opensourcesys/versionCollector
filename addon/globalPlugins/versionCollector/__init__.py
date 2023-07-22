@@ -5,6 +5,7 @@
 # See the file COPYING for more details.
 
 import wx
+import os
 from datetime import datetime
 from dataclasses import dataclass, field
 from typing import Callable, Optional, List, Dict, Any
@@ -22,6 +23,11 @@ from appModuleHandler import post_appSwitch
 from core import postNvdaStartup, callLater as core_callLater
 
 #from . import toolsGUI
+
+
+def getWindowsBitness() -> int:
+	"""A hack to determine Windows bitness, until a better way is found."""
+	return 64 if os.environ.get("ProgramFiles(x86)") is not None else 32
 
 
 @dataclass(repr=False, eq=True)
@@ -126,6 +132,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.addToCacheOrUpdateDate(_AppData(
 			name="Microsoft Windows",
 			version=winVersion.getWinVer(),
+			is64bit=True if getWindowsBitness() == 64 else False
 		))
 		self.addToCacheOrUpdateDate(_AppData(
 			name="NVDA",
