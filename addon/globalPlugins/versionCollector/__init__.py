@@ -9,8 +9,10 @@ from datetime import datetime
 from dataclasses import dataclass, field
 from typing import Callable, Optional, List, Dict, Any
 
-import globalPluginHandler
 import addonHandler
+import globalPluginHandler
+import buildVersion
+import winVersion
 import api
 import ui
 from logHandler import log
@@ -118,10 +120,19 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.currentApp: Optional[_AppData] = None
 		# Run our handler whenever the application changes
 		post_appSwitch.register(self.onAppSwitch)
-		# Seed the pond
-		postNvdaStartup.register(self.collectInitialApp)
 		# Become aware of all NVDA add-ons
 		postNvdaStartup.register(self.retrieveInstalledAddons)
+		# Seed the pond by adding Windows version, NVDA version, and current app.
+		self.addToCacheOrUpdateDate(_AppData(
+			name="Microsoft Windows",
+			version=winVersion.getWinVer(),
+		))
+		self.addToCacheOrUpdateDate(_AppData(
+			name="NVDA",
+			version=buildVersion.version,
+			is64bit=False
+		))
+		postNvdaStartup.register(self.collectInitialApp)
 
 	def terminate(self) -> None:
 		# Unregister the extensionPoints
