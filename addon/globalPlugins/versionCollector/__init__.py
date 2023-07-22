@@ -293,7 +293,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def getStructuredAppList(self, useHTML=False) -> str:
 		return self.createStructuredList(
 			self.generateAppsOnly, useHTML, hideFields=("isAddon", "isAddonEnabled", "extra"),
-			transformFields={"is64bit": lambda x: "[64 bit]" if x else "[32 bit]"}
+			transformFields={"is64bit": lambda x: "" if x is None else ("[64 bit]" if x else "[32 bit]")}
 		)
 
 	def getStructuredAddonList(self, useHTML=False) -> str:
