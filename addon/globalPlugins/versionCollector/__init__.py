@@ -271,6 +271,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				for field in fields:
 					line += f"{fieldStart}{field}{fieldEnd}"
 			if line != "":
+				if not isHTML:  # Remove the extra tab character
+					line = line.removesuffix("\t")
 				returnable += f"{lineStart}{line}{lineEnd}"
 		return returnable
 
