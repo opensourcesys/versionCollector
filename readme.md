@@ -43,8 +43,7 @@ The text report is preferable for copying.
 
 ### Special notes
 
-* In order to collect your NVDA version, you may simply open the NVDA menu (`NVDA+n`). This is enough to include your NVDA version in the list of captured versions. A future release will collect your NVDA version without needing to do this.
-* In order to collect your Windows version, open any Windows application (Explorer, desktop, etc.), and reference the version column that appears in the report. The Windows version will be directly collected in a future release.
+Your Windows and NVDA versions are automatically collected on startup.
 
 Please make feature requests by email or [GitHub issue][2].
 As always, I am happy to hear from users of my add-ons, even just to say how you found the add-on useful.
