@@ -245,7 +245,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	) -> str:
 		"""Takes a generator of _AppData records, and returns their data in a structured way."""
 		if useHTML:
-			lineStart = "<tr><TD>&#8611;</TD>"
+			lineStart = "<tr><TD>&#10145;</TD>"
 			fieldStart = "<td>"
 			fieldEnd = "</td>"
 			lineEnd = "</tr>\n"
@@ -271,6 +271,8 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				for field in fields:
 					line += f"{fieldStart}{field}{fieldEnd}"
 			if line != "":
+				if not isHTML:  # Remove the extra tab character
+					line = line.removesuffix("\t")
 				returnable += f"{lineStart}{line}{lineEnd}"
 		return returnable
 
@@ -324,12 +326,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		# Translators: Suggestions on how a user can interact with the Version Report.
 		output += "<p>" + _("Use shift+arrow keys to select, ctrl+c to copy to clipboard.")
 		output += """</p>\n<br><h1>Detected Applications:</h1>\n<table>
-		<tr><TH>&nbsp;</TH> <TH>NAME</TH> <TH>VERSION</TH> <TH>BITNESS</TH> </tr>
+		<tr><TH></TH> <TH>NAME</TH> <TH>VERSION</TH> <TH>BITNESS</TH> </tr>
 		"""
 		output += self.getStructuredAppList(True)
 		output += """</table><br>
 		<h1>Detected NVDA Add-ons:</h1>\n<table>
-		<tr><TH>&nbsp;</TH><TH>NAME</TH> <TH>VERSION</TH> <TH>STATUS</TH> <TH>AUTHOR/PUBLISHER</TH> <TH>Add-on ID</TH></tr>
+		<tr><TH></TH><TH>NAME</TH> <TH>VERSION</TH> <TH>STATUS</TH> <TH>AUTHOR/PUBLISHER</TH> <TH>Add-on ID</TH></tr>
 		"""
 		output += self.getStructuredAddonList(True)
 		output += "</table><br>\n<p>"
