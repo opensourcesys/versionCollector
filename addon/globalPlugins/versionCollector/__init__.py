@@ -279,7 +279,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 					line += f"{fieldStart}{field}{fieldEnd}"
 			if line != "":
 				if not useHTML:  # Remove the extra tab character
-					line = line.removesuffix("\t")
+					line = line.rstrip("\t")
 				returnable += f"{lineStart}{line}{lineEnd}"
 		return returnable
 
