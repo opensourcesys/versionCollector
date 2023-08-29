@@ -144,7 +144,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def terminate(self) -> None:
 		# Unregister the extensionPoints
 		post_appSwitch.unregister(self.onAppSwitch)
-		postNvdaStartup.unregister(self.onAppSwitch)
+		postNvdaStartup.unregister(self.collectInitialApp)
 		postNvdaStartup.unregister(self.retrieveInstalledAddons)
 		super().terminate()
 
@@ -197,7 +197,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		"""Called as a registered extensionPoint, when NVDA first finishes loading."""
 		log.debug("Collecting the initial app after a delay.")
 		core_callLater(1000, self.onAppSwitch)
-		postNvdaStartup.unregister(self.collectInitialApp)
 
 	def addToCacheOrUpdateDate(self, subject: _AppData) -> None:
 		ind = getCacheIndexOf(subject)
